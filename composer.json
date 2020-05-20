@@ -1,0 +1,21 @@
+{
+  "name": "gw/gw_oxid_vouchers_extended",
+  "description": "Vouchers Extended module for OXID eShop 6.x",
+  "type": "oxideshop-module",
+  "extra": {
+    "oxideshop": {
+      "blacklist-filter": [
+        "documentation/**/*.*"
+      ],
+      "target-directory": "gw/gw_oxid_vouchers_extended"
+    }
+  },
+  "require": {
+    "php": ">=7.1"
+  },
+  "autoload": {
+    "psr-4": {
+      "gw\\gw_oxid_vouchers_extended\\": "./"
+    }
+  }
+}
