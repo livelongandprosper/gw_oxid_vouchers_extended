@@ -2,7 +2,7 @@
 
 Module that extends the voucher system of OXID eShop. Tested with OXID eShop 6.1.3 (should work with v6.x).
 
-##Features##
+## Features
 * adds option to voucher series that vouchers of a voucher series can only be used one time per delivery address
     * used vouchers are saved with a md5 checksum which is generated with delivery address fields
     * address fields can be chosen in module options
