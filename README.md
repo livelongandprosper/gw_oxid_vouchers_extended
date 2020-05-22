@@ -2,6 +2,7 @@
 
 **Features**
 - add option to voucher series that vouchers of voucher series can only be used one time per delivery address
+- - address fields can be chosen in module options
 
 ## Install
 - This module has to be put to the folder
