@@ -1,7 +1,7 @@
 # Extended Vouchers
 
 **Features**
-- add option to voucher series that vouchers can only be used one time per user
+- add option to voucher series that vouchers of voucher series can only be used one time per delivery address
 
 ## Install
 - This module has to be put to the folder

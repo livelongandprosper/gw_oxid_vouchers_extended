@@ -6,8 +6,8 @@ $sLangName  = "Deutsch";
 $aLang = array(
 	'charset' => 'UTF-8',
 
-	// configuration groups
-	'GW_ONLY_ONCE_PER_USER' => 'Gutscheine dieser Serie nur einmal pro Benutzer gültig',
-	'HELP_GW_ONLY_ONCE_PER_USER' => 'Wenn der Benutzer bereits einen Gutschein dieser Serie verwendet hat, darf er nicht erneut einen Gutschein dieser Serien verwenden.',
+	// backend translations
+	'GW_ONLY_ONCE_PER_SHIPPING_ADDRESS' => 'Gutscheine dieser Serie nur einmal pro Liefer-Adresse gültig',
+	'HELP_GW_ONLY_ONCE_PER_SHIPPING_ADDRESS' => 'Dies soll etwas stärker verhindern, dass Kunden mehrmals durch mehrmaliges Registrieren mit verschiedenen E-Mail-Adressen, den Gutscheincode verwenden können.',
 );
 ?>

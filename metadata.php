@@ -26,15 +26,25 @@ $aModule = array(
     'description'  => array(
     	'de'		=> 'Erweitert die Möglichkeiten von Gutscheinserien in OXID eShop
 							<ul>
-								<li>Ermöglicht, dass Gutscheine einer Gutscheinserien nur einmal pro Kunde verwendet werden können</li>
+								<li>Ermöglicht, dass Gutscheine einer Gutscheinserien nur einmal pro Liefer-Adresse verwendet werden können</li>
 							</ul>
 						',
     ),
     'extend'       => array(
+		OxidEsales\Eshop\Application\Model\Voucher::class => gw\gw_oxid_vouchers_extended\Application\Model\Voucher::class,
 		OxidEsales\Eshop\Application\Model\VoucherSerie::class => gw\gw_oxid_vouchers_extended\Application\Model\VoucherSerie::class,
-
     ),
     'settings'		=> array(
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxcompany', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxfname', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxlname', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxstreet', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxstreetnr', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxaddinfo', 'type' => 'bool', 'value' => '0'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxzip', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxcity', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxcountryid', 'type' => 'bool', 'value' => '1'),
+		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxstateid', 'type' => 'bool', 'value' => '0'),
     ),
     'files'			=> array(
     ),

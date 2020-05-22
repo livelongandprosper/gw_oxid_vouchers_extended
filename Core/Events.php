@@ -46,8 +46,10 @@
 
 		public static function onActivate() {
 			try {
-				self::add_db_field('oxvoucherseries', 'gw_only_once_per_user', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'defines if  users are allowed to use vouchers of that series one time only'");
+				self::add_db_field('oxvoucherseries', 'gw_only_once_per_shipping_address', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'defines that vouchers of that series are only allowed for a single billing address'");
 //				self::add_db_key('oxvoucherseries', 'gw_OXVARSELECT', array("OXVARSELECT"));
+
+				self::add_db_field('oxvouchers', 'gw_shipping_address_checksum', "VARCHAR(32) DEFAULT '' NOT NULL COMMENT 'md5 checksum shipping address of the order in which the voucher was used'");
 			}	catch (OxidEsales\Eshop\Core\Exception\DatabaseErrorException $e) {
 				// do nothing... php will ignore and continue
 			}
