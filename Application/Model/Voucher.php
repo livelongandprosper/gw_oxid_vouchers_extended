@@ -44,9 +44,10 @@ class Voucher extends Voucher_parent {
 			// md5 of shipping address
 			$sSippingAddressMD5 = $this->_getShippingAddressMD5($oUser);
 
-
+			/*
 			$logger = Registry::getLogger();
 			$logger->error($sSippingAddressMD5, []);
+			*/
 
 			$oDb = \OxidEsales\Eshop\Core\DatabaseProvider::getDb();
 			$sSelect = 'select count(*) from ' . $this->getViewName() . ' where gw_shipping_address_checksum = ' . $oDb->quote($sSippingAddressMD5) . ' and gw_shipping_address_checksum != ' . "'' and ";
