@@ -26,101 +26,101 @@ After you have done that go to shop backend and activate module.
 
     const $voucherForm = $("form[name='voucher']");
 
-$voucherForm.on("submit", function(e){
+    $voucherForm.on("submit", function(e){
 
-    e.preventDefault(); // avoid to execute the actual submit of the form.
+        e.preventDefault(); // avoid to execute the actual submit of the form.
 
-    var form = $(this);
-    var url = form.attr('action');
+        var form = $(this);
+        var url = form.attr('action');
 
-    let $ajaxLoader = $voucherForm.find(".ajax-content-loader");
-    // Create a loading circle if this item doesn't have one yet.
-    if($ajaxLoader.length === 0) {
+        let $ajaxLoader = $voucherForm.find(".ajax-content-loader");
+        // Create a loading circle if this item doesn't have one yet.
+        if($ajaxLoader.length === 0) {
 
-        $voucherForm.append("<div class=\"ajax-content-loader\" />");
-        $ajaxLoader = $voucherForm.find(".ajax-content-loader");
-    }
-    $ajaxLoader.fadeIn();
+            $voucherForm.append("<div class=\"ajax-content-loader\" />");
+            $ajaxLoader = $voucherForm.find(".ajax-content-loader");
+        }
+        $ajaxLoader.fadeIn();
 
-    $.ajax({
+        $.ajax({
 
-        type: "POST",
-        url: url,
-        data: form.serialize(), // serializes the form's elements.
-        success: function(data) {
+            type: "POST",
+            url: url,
+            data: form.serialize(), // serializes the form's elements.
+            success: function(data) {
 
-            const $errors = $(data).find(".alert");
+                const $errors = $(data).find(".alert");
 
-            if($errors.length) {
+                if($errors.length) {
 
-                $voucherForm.parent().find(".alert").remove();
-                $voucherForm.before($errors);
+                    $voucherForm.parent().find(".alert").remove();
+                    $voucherForm.before($errors);
 
-            } else {
+                } else {
 
-                $ajaxLoader.fadeOut(function(){
+                    $ajaxLoader.fadeOut(function(){
+                        location.reload();
+                    });
+
+                }
+
+            },
+
+            // Timeout
+            error(x, t, m) {
+
+                if(t === "timeout") {
+
+                    console.error("Error - Code: T3");
+                    // location.reload();
+
+                } else {
+
+                    console.error("Error - Code: 3");
+                    // location.reload();
+
+                }
+
+            },
+
+            complete(data) {
+
+                $ajaxLoader.fadeOut();
+
+            }
+
+        });
+    });
+
+    $(document).on("click", ".couponData .removeFn", function (event) {
+
+        const url = $(this).attr("href");
+        let $ajaxLoader = $voucherForm.find(".ajax-content-loader");
+        // Create a loading circle if this item doesn't have one yet.
+        if($ajaxLoader.length === 0) {
+
+            $voucherForm.append("<div class=\"ajax-content-loader\" />");
+            $ajaxLoader = $voucherForm.find(".ajax-content-loader");
+        }
+        $ajaxLoader.fadeIn();
+
+        $.ajax({
+
+            type: "GET",
+            url: url,
+            success: function (data) {
+
+                const $errors = $(data).find(".alert");
+
+                $ajaxLoader.fadeOut(function () {
                     location.reload();
                 });
 
             }
 
-        },
-
-        // Timeout
-        error(x, t, m) {
-
-            if(t === "timeout") {
-
-                console.error("Error - Code: T3");
-                // location.reload();
-
-            } else {
-
-                console.error("Error - Code: 3");
-                // location.reload();
-
-            }
-
-        },
-
-        complete(data) {
-
-            $ajaxLoader.fadeOut();
-
-        }
+        });
+        return false;
 
     });
-});
-
-$(document).on("click", ".couponData .removeFn", function (event) {
-
-    const url = $(this).attr("href");
-    let $ajaxLoader = $voucherForm.find(".ajax-content-loader");
-    // Create a loading circle if this item doesn't have one yet.
-    if($ajaxLoader.length === 0) {
-
-        $voucherForm.append("<div class=\"ajax-content-loader\" />");
-        $ajaxLoader = $voucherForm.find(".ajax-content-loader");
-    }
-    $ajaxLoader.fadeIn();
-
-    $.ajax({
-
-        type: "GET",
-        url: url,
-        success: function (data) {
-
-            const $errors = $(data).find(".alert");
-
-            $ajaxLoader.fadeOut(function () {
-                location.reload();
-            });
-
-        }
-
-    });
-    return false;
-
-});
 
 ´´´
