@@ -19,7 +19,7 @@ $aModule = array(
     'id'           => 'gw_oxid_vouchers_extended',
     'title'        => 'Erweiterte Gutscheinserien',
 //     'thumbnail'    => 'out/admin/img/logo.jpg',
-    'version'      => '1.0.0',
+    'version'      => '1.1.0',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
     'url'		   => 'https://www.gregor-wendland.de',
@@ -27,6 +27,8 @@ $aModule = array(
     	'de'		=> 'Erweitert die Möglichkeiten von Gutscheinserien in OXID eShop
 							<ul>
 								<li>Ermöglicht, dass Gutscheine einer Gutscheinserien nur einmal pro Liefer-Adresse verwendet werden können</li>
+								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt eingegeben werden können (dabei findet eine Weiterleitung auf die Warenkorb-Seite statt, was aber durch ein einfaches JavaScript, dass den Prozess per AJAX realsiiert, für die Benutzer-Ansicht umgegangen werden kann)</li>
+								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt eingegeben werden können</li>
 							</ul>
 						',
     ),
@@ -35,6 +37,10 @@ $aModule = array(
 		OxidEsales\Eshop\Application\Model\VoucherSerie::class => gw\gw_oxid_vouchers_extended\Application\Model\VoucherSerie::class,
     ),
     'settings'		=> array(
+    	// Allgemein
+		array('group' => 'gw_oxid_vouchers_extended', 'name' => 'gw_oxid_vouchers_extended_hide_form_in_basket', 'type' => 'bool', 'value' => '1'),
+
+		// Adressfelder, die zur Berechnung der Checksumme herangezogen werden sollen
 		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxcompany', 'type' => 'bool', 'value' => '1'),
 		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxfname', 'type' => 'bool', 'value' => '1'),
 		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxlname', 'type' => 'bool', 'value' => '1'),
@@ -49,6 +55,18 @@ $aModule = array(
     'files'			=> array(
     ),
 	'blocks' => array(
+		// frontend
+		array(
+			'template' => 'page/checkout/order.tpl',
+			'block' => 'checkout_order_vouchers',
+			'file' => 'Application/views/blocks/checkout_order_vouchers.tpl'
+		),
+		array(
+			'template' => 'layout/base.tpl',
+			'block' => 'base_style',
+			'file' => 'Application/views/blocks/base_style.tpl'
+		),
+
 		// backend
 		array(
 			'template' => 'voucherserie_main.tpl',

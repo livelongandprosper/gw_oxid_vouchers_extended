@@ -13,6 +13,8 @@ $aLang = array(
 	'SHOP_MODULE_gw_oxid_vouchers_extended_' => '',
 	'HELP_SHOP_MODULE_gw_oxid_vouchers_extended_' => '',
 
+	'SHOP_MODULE_'.'gw_oxid_vouchers_extended_hide_form_in_basket' => 'Gutscheineingabe im Warenkorb verbergen',
+
 	'SHOP_MODULE_'.'gw_oxid_vouchers_extended_oxcompany' => 'Firma',
 	'SHOP_MODULE_'.'gw_oxid_vouchers_extended_oxfname' => 'Vorname',
 	'SHOP_MODULE_'.'gw_oxid_vouchers_extended_oxlname' => 'Nachname',
