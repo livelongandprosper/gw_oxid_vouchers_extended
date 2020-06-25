@@ -21,7 +21,9 @@ Module that extends the voucher system of OXID eShop. Tested with OXID eShop 6.1
 After you have done that go to shop backend and activate module.
 
 ## JavaScript which can be used to make AJAX calls (jQuery required); put these in to your
+
 ´´´javascript
+
 const $voucherForm = $("form[name='voucher']");
 
 $voucherForm.on("submit", function(e){
@@ -120,4 +122,5 @@ $(document).on("click", ".couponData .removeFn", function (event) {
     return false;
 
 });
+
 ´´´
