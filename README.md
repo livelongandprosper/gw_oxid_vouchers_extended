@@ -24,7 +24,7 @@ After you have done that go to shop backend and activate module.
 
 ´´´javascript
 
-const $voucherForm = $("form[name='voucher']");
+    const $voucherForm = $("form[name='voucher']");
 
 $voucherForm.on("submit", function(e){
 
