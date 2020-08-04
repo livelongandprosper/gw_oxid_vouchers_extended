@@ -19,7 +19,7 @@ $aModule = array(
     'id'           => 'gw_oxid_vouchers_extended',
     'title'        => 'Erweiterte Gutscheinserien',
 //     'thumbnail'    => 'out/admin/img/logo.jpg',
-    'version'      => '1.1.0',
+    'version'      => '1.2.0',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
     'url'		   => 'https://www.gregor-wendland.de',
@@ -28,7 +28,8 @@ $aModule = array(
 							<ul>
 								<li>Ermöglicht, dass Gutscheine einer Gutscheinserien nur einmal pro Liefer-Adresse verwendet werden können</li>
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt eingegeben werden können (dabei findet eine Weiterleitung auf die Warenkorb-Seite statt, was aber durch ein einfaches JavaScript, dass den Prozess per AJAX realsiiert, für die Benutzer-Ansicht umgegangen werden kann)</li>
-								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt eingegeben werden können</li>
+								<li>Ermöglicht, dass Gutscheine auch im vorletzten Bestellschritt (Zahlung und Versand) eingegeben werden können</li>
+								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
 							</ul>
 						',
     ),
@@ -60,6 +61,11 @@ $aModule = array(
 			'template' => 'page/checkout/order.tpl',
 			'block' => 'checkout_order_vouchers',
 			'file' => 'Application/views/blocks/checkout_order_vouchers.tpl'
+		),
+		array(
+			'template' => 'page/checkout/payment.tpl',
+			'block' => 'checkout_payment_main',
+			'file' => 'Application/views/blocks/checkout_payment_vouchers.tpl'
 		),
 		array(
 			'template' => 'layout/base.tpl',
