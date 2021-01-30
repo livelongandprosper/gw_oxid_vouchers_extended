@@ -22,7 +22,7 @@ $aModule = array(
     'version'      => '1.3.0',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
-    'url'		   => 'https://www.gregor-wendland.de',
+    'url'		   => 'https://www.gregor-wendland.com',
     'description'  => array(
     	'de'		=> 'Erweitert die Möglichkeiten von Gutscheinserien in OXID eShop
 							<ul>
