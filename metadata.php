@@ -19,7 +19,7 @@ $aModule = array(
     'id'           => 'gw_oxid_vouchers_extended',
     'title'        => 'Erweiterte Gutscheinserien',
 //     'thumbnail'    => 'out/admin/img/logo.jpg',
-    'version'      => '1.2.0',
+    'version'      => '1.3.0',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
     'url'		   => 'https://www.gregor-wendland.de',
@@ -30,10 +30,13 @@ $aModule = array(
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt eingegeben werden können (dabei findet eine Weiterleitung auf die Warenkorb-Seite statt, was aber durch ein einfaches JavaScript, dass den Prozess per AJAX realsiiert, für die Benutzer-Ansicht umgegangen werden kann)</li>
 								<li>Ermöglicht, dass Gutscheine auch im vorletzten Bestellschritt (Zahlung und Versand) eingegeben werden können</li>
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
+								<li>Gutscheinserien können so eingestellt werden, dass sie nicht auf rabattierte Artikel (UVP > Preis) angewendet werden.</li>
+								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden.</li>
 							</ul>
 						',
     ),
     'extend'       => array(
+		OxidEsales\Eshop\Application\Model\Discount::class => gw\gw_oxid_vouchers_extended\Application\Model\Discount::class,
 		OxidEsales\Eshop\Application\Model\Voucher::class => gw\gw_oxid_vouchers_extended\Application\Model\Voucher::class,
 		OxidEsales\Eshop\Application\Model\VoucherSerie::class => gw\gw_oxid_vouchers_extended\Application\Model\VoucherSerie::class,
     ),

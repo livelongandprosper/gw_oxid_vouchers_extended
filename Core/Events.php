@@ -50,6 +50,9 @@
 //				self::add_db_key('oxvoucherseries', 'gw_OXVARSELECT', array("OXVARSELECT"));
 
 				self::add_db_field('oxvouchers', 'gw_shipping_address_checksum', "VARCHAR(32) DEFAULT '' NOT NULL COMMENT 'md5 checksum shipping address of the order in which the voucher was used'");
+				self::add_db_field('oxvoucherseries', 'gw_only_not_reduced_articles', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'defines that vouchers of that series are only allowed for not reduced articles'");
+				self::add_db_field('oxvoucherseries', 'gw_handle_like_discount', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'vouchers should be handled as discount when order is finished'");
+
 			}	catch (OxidEsales\Eshop\Core\Exception\DatabaseErrorException $e) {
 				// do nothing... php will ignore and continue
 			}

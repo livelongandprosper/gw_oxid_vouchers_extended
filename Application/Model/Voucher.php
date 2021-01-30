@@ -30,7 +30,35 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
-	 * TODO: intensiv testen, ob die Adressveränderung auch am Ende des Checkout prozesses dazu führt, dass der Gutschein ungültig wird
+	 * Returns true if voucher is product specific or only for not reduced articles, otherwise false
+	 *
+	 * @return boolean
+	 */
+	protected function _isProductVoucher() {
+		$oSeries = $this->getSerie();
+		if ($oSeries->oxvoucherseries__gw_only_not_reduced_articles->value) {
+			return true;
+		}
+		return parent::_isProductVoucher();
+	}
+
+	/**
+	 * Add field to oxdiscount__gw_apply_for_reduced_articles to discount serie object
+	 *
+	 * @return object
+	 */
+	protected function _getSerieDiscount() {
+		$oSeries = $this->getSerie();
+		$parent_return = parent::_getSerieDiscount();
+		$parent_return->oxdiscount__gw_apply_for_reduced_articles = new \OxidEsales\Eshop\Core\Field((bool) $oSeries->oxvoucherseries__gw_only_not_reduced_articles->value);
+		$parent_return->oxdiscount__gw_is_product_voucher = new \OxidEsales\Eshop\Core\Field((bool) parent::_isProductVoucher());
+		$parent_return->oxdiscount__gw_is_category_voucher = new \OxidEsales\Eshop\Core\Field((bool) parent::_isCategoryVoucher());
+
+		return $parent_return;
+	}
+
+	/**
+	 * Check if this voucher is available with other shipping address
 	 *
 	 * @param $oUser
 	 *
