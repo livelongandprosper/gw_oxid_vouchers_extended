@@ -43,6 +43,15 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
+	 * Should a voucher be converted to regular dicount (DB oxorder.oxdiscount)
+	 * @return bool
+	 */
+	public function shouldConvertToDiscount() {
+		$oSeries = $this->getSerie();
+		return (bool) $oSeries->oxvoucherseries__gw_handle_like_discount->value;
+	}
+
+	/**
 	 * Add field to oxdiscount__gw_apply_for_reduced_articles to discount serie object
 	 *
 	 * @return object

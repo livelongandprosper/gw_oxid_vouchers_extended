@@ -31,12 +31,13 @@ $aModule = array(
 								<li>Ermöglicht, dass Gutscheine auch im vorletzten Bestellschritt (Zahlung und Versand) eingegeben werden können</li>
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
 								<li>Gutscheinserien können so eingestellt werden, dass sie nicht auf rabattierte Artikel (UVP > Preis) angewendet werden.</li>
-								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden.</li>
+								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden. Dies kann sinnvoll sein, wenn ein Rabatt–Gutschein zwar wie ein Gutschein funktionieren soll, später aber als Rabatt verbucht werden soll. In manchen Warenwirtschaftssystemen können einzelne Gutscheine nicht als Rabatt verbucht werden, sondern müssen bereits beim Bestellabschluss als Rabatt (oxdiscount) und nicht als Gutschein (oxvoucherdiscount) gespeichert/übergeben werden.</li>
 							</ul>
 						',
     ),
     'extend'       => array(
 		OxidEsales\Eshop\Application\Model\Discount::class => gw\gw_oxid_vouchers_extended\Application\Model\Discount::class,
+		OxidEsales\Eshop\Application\Model\Order::class => gw\gw_oxid_vouchers_extended\Application\Model\Order::class,
 		OxidEsales\Eshop\Application\Model\Voucher::class => gw\gw_oxid_vouchers_extended\Application\Model\Voucher::class,
 		OxidEsales\Eshop\Application\Model\VoucherSerie::class => gw\gw_oxid_vouchers_extended\Application\Model\VoucherSerie::class,
     ),
