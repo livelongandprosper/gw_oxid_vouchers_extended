@@ -32,7 +32,7 @@ $aModule = array(
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
 								<li>Gutscheinserien können so eingestellt werden, dass sie nicht auf rabattierte Artikel (UVP > Preis) angewendet werden.</li>
 								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden. Dies kann sinnvoll sein, wenn ein Rabatt–Gutschein zwar wie ein Gutschein funktionieren soll, später aber als Rabatt verbucht werden soll. In manchen Warenwirtschaftssystemen können einzelne Gutscheine nicht als Rabatt verbucht werden, sondern müssen bereits beim Bestellabschluss als Rabatt (oxdiscount) und nicht als Gutschein (oxvoucherdiscount) gespeichert/übergeben werden.</li>
-								<li>Gutscheinserien könne gruppiert werden, sodass eingestellt werden kann, dass immer nur eine Gutscheinserie einer Gruppe verwendet werden darf.</li>
+								<li>Gutscheinserien können gruppiert werden, sodass eingestellt werden kann, dass immer nur eine Gutscheinserie einer Gruppe verwendet werden darf.</li>
 							</ul>
 						',
     ),

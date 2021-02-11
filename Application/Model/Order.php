@@ -72,7 +72,7 @@ class Order extends Order_parent {
 	}
 
 	protected function recalculateOrderByOrderArticleDiscountVoucher() {
-		
+
 	}
 
 	/**
