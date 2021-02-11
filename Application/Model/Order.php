@@ -6,6 +6,7 @@ namespace gw\gw_oxid_vouchers_extended\Application\Model;
  */
 class Order extends Order_parent {
 	public function finalizeOrder(\OxidEsales\Eshop\Application\Model\Basket $oBasket, $oUser, $blRecalculatingOrder = false) {
+		$saveOrderAtEnd = false;
 		if(!$blRecalculatingOrder) {
 			$orderId = $orderId = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable('sess_challenge');;
 		}
@@ -18,17 +19,23 @@ class Order extends Order_parent {
 
 			$vouchers = $oBasket->getVouchers();
 			// get all vouchers applied
-			// check if vouchher series
+			// check if voucher series
 
 			if(count($vouchers)) {
 				foreach ($vouchers as $voucherId => $stdObjVoucher) {
 					$oVoucher = oxNew(\OxidEsales\Eshop\Application\Model\Voucher::class);
 					$oVoucher->load($voucherId);
 
-					if($oVoucher->shouldConvertToDiscount()) {
+					if($oVoucher->isDiscountVoucher()) {
+						$oDiscount = $oVoucher->getSeriesDiscount();
 
 						// calculating price to apply discount
-						$dPrice = $oBasket->getDiscountProductsPrice()->getSum($oBasket->isCalculationModeNetto()) - $oBasket->getTotalDiscount()->getPrice();
+						$dPrice = 0.0;
+						foreach ($this->getOrderArticles(true) as $oOrderArticle) {
+							if ($oDiscount->isForBasketItem($oOrderArticle)) {
+								$dPrice += $oOrderArticle->oxorderarticles__oxbprice->value;
+							}
+						}
 
 						// remove voucher discount
 						$dVoucherdiscount = $oVoucher->getDiscountValue($dPrice);
@@ -37,7 +44,10 @@ class Order extends Order_parent {
 						if($this->oxorder__oxvoucherdiscount->value == $dVoucherdiscount) {
 							$this->oxorder__oxvoucherdiscount->value = 0.0;
 						} else {
-							if( ($this->oxorder__oxvoucherdiscount->value - $dVoucherdiscount) >= 0 ) {
+							$logger = \OxidEsales\Eshop\Core\Registry::getLogger();
+							$logger->error($this->oxorder__oxvoucherdiscount->value ."-". $dVoucherdiscount." = ".($this->oxorder__oxvoucherdiscount->value - $dVoucherdiscount), []);
+
+							if( $this->oxorder__oxvoucherdiscount->value - $dVoucherdiscount >= 0 ) {
 								$this->addVoucherDiscount(-1.0 * $dVoucherdiscount);
 							}
 						}
@@ -48,14 +58,21 @@ class Order extends Order_parent {
 						// mark voucher as transformed
 						$oVoucher->oxvouchers__gw_transformed_to_discount->setValue(1);
 						$oVoucher->save();
+						$saveOrderAtEnd = true;
 					}
 				}
 			}
-
 		}
-		$this->save();
+
+		if($saveOrderAtEnd) {
+			$this->save();
+		}
 
 		return $parent_return;
+	}
+
+	protected function recalculateOrderByOrderArticleDiscountVoucher() {
+		
 	}
 
 	/**

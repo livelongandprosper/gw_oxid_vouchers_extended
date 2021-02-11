@@ -19,7 +19,7 @@ $aModule = array(
     'id'           => 'gw_oxid_vouchers_extended',
     'title'        => 'Erweiterte Gutscheinserien',
 //     'thumbnail'    => 'out/admin/img/logo.jpg',
-    'version'      => '1.3.0',
+    'version'      => '1.4.0',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
     'url'		   => 'https://www.gregor-wendland.com',
@@ -32,6 +32,7 @@ $aModule = array(
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
 								<li>Gutscheinserien können so eingestellt werden, dass sie nicht auf rabattierte Artikel (UVP > Preis) angewendet werden.</li>
 								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden. Dies kann sinnvoll sein, wenn ein Rabatt–Gutschein zwar wie ein Gutschein funktionieren soll, später aber als Rabatt verbucht werden soll. In manchen Warenwirtschaftssystemen können einzelne Gutscheine nicht als Rabatt verbucht werden, sondern müssen bereits beim Bestellabschluss als Rabatt (oxdiscount) und nicht als Gutschein (oxvoucherdiscount) gespeichert/übergeben werden.</li>
+								<li>Gutscheinserien könne gruppiert werden, sodass eingestellt werden kann, dass immer nur eine Gutscheinserie einer Gruppe verwendet werden darf.</li>
 							</ul>
 						',
     ),
@@ -40,6 +41,7 @@ $aModule = array(
 		OxidEsales\Eshop\Application\Model\Order::class => gw\gw_oxid_vouchers_extended\Application\Model\Order::class,
 		OxidEsales\Eshop\Application\Model\Voucher::class => gw\gw_oxid_vouchers_extended\Application\Model\Voucher::class,
 		OxidEsales\Eshop\Application\Model\VoucherSerie::class => gw\gw_oxid_vouchers_extended\Application\Model\VoucherSerie::class,
+		OxidEsales\Eshop\Core\ViewConfig::class => gw\gw_oxid_vouchers_extended\Core\ViewConfig::class,
     ),
     'settings'		=> array(
     	// Allgemein

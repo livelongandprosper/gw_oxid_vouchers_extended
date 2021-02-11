@@ -30,6 +30,23 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
+	 * Checks availability without user logged in. Returns array with errors.
+	 *
+	 * @param array  $aVouchers array of vouchers
+	 * @param double $dPrice    current sum (price)
+	 *
+	 * @throws oxVoucherException exception
+	 *
+	 * @return array
+	 */
+	public function checkVoucherAvailability($aVouchers, $dPrice) {
+		$this->_isAvailableWithSameVoucherSeriesGroup($aVouchers);
+
+		// returning true - no exception was thrown
+		return parent::checkVoucherAvailability($aVouchers, $dPrice);
+	}
+
+	/**
 	 * Returns true if voucher is product specific or only for not reduced articles, otherwise false
 	 *
 	 * @return boolean
@@ -46,24 +63,79 @@ class Voucher extends Voucher_parent {
 	 * Should a voucher be converted to regular dicount (DB oxorder.oxdiscount)
 	 * @return bool
 	 */
-	public function shouldConvertToDiscount() {
+	public function isDiscountVoucher() {
 		$oSeries = $this->getSerie();
 		return (bool) $oSeries->oxvoucherseries__gw_handle_like_discount->value;
 	}
 
 	/**
-	 * Add field to oxdiscount__gw_apply_for_reduced_articles to discount serie object
+	 * Add field to oxdiscount__gw_dont_apply_for_reduced_articles to discount serie object
 	 *
 	 * @return object
 	 */
 	protected function _getSerieDiscount() {
 		$oSeries = $this->getSerie();
 		$parent_return = parent::_getSerieDiscount();
-		$parent_return->oxdiscount__gw_apply_for_reduced_articles = new \OxidEsales\Eshop\Core\Field((bool) $oSeries->oxvoucherseries__gw_only_not_reduced_articles->value);
+		$parent_return->oxdiscount__gw_dont_apply_for_reduced_articles = new \OxidEsales\Eshop\Core\Field((bool) $oSeries->oxvoucherseries__gw_only_not_reduced_articles->value);
 		$parent_return->oxdiscount__gw_is_product_voucher = new \OxidEsales\Eshop\Core\Field((bool) parent::_isProductVoucher());
 		$parent_return->oxdiscount__gw_is_category_voucher = new \OxidEsales\Eshop\Core\Field((bool) parent::_isCategoryVoucher());
 
 		return $parent_return;
+	}
+	public function getSeriesDiscount() {
+		return $this->_getSerieDiscount();
+	}
+
+	/**
+	 * Check if this voucher is available with same voucher series group
+	 *
+	 * @param $aVouchers
+	 *
+	 * @throws oxVoucherException exception
+	 *
+	 * @return bool
+	 */
+	protected function _isAvailableWithSameVoucherSeriesGroup($aVouchers) {
+		$logger = Registry::getLogger();
+		$logger->error('', $aVouchers);
+
+		if(is_array($aVouchers)) {
+			$oSeries = $this->getSerie();
+			if( count($aVouchers) > 1 && $oSeries->notAllowedWithSameGroup() && $oSeries->getGroupName() != '' ) {
+				$usedGroups = $this->_getVoucherSeriesGroupsUsed($aVouchers);
+				if( count($usedGroups) > 0 && in_array($oSeries->getGroupName(), $usedGroups) ) {
+					// Exception
+					$oEx = oxNew(\OxidEsales\Eshop\Core\Exception\VoucherException::class);
+					$oEx->setMessage('GW_ERROR_MESSAGE_VOUCHER_CANT_BE_USED_WITH_SAME_SERIES');
+					$oEx->setVoucherNr($this->oxvouchers__oxvouchernr->value);
+					throw $oEx;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Return array of voucher series already
+	 * (currently checked objects group will not be added to this array)
+	 * @param $aVouchers
+	 * @return array
+	 */
+	private function _getVoucherSeriesGroupsUsed($aVouchers) {
+		$return_value = array();
+		if(count($aVouchers)) {
+			foreach ($aVouchers as $voucherId => $voucherNr) {
+				if($voucherId != $this->getId()) {
+					$oVoucher = oxNew(\OxidEsales\Eshop\Application\Model\Voucher::class);
+					$oVoucher->load($voucherId);
+					$oSeries = $oVoucher->getSerie();
+					if( $oSeries->getGroupName() != '' && !in_array($oSeries->getGroupName(), $return_value) ) {
+						$return_value[] = $oSeries->getGroupName();
+					}
+				}
+			}
+		}
+		return $return_value;
 	}
 
 	/**
