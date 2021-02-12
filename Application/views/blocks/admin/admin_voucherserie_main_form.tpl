@@ -24,9 +24,10 @@
         [{oxmultilang ident="GW_HANDLE_LIKE_DISCOUNT"}]
     </td>
     <td class="edittext">
-        <input type="hidden" name="editval[oxvoucherseries__gw_handle_like_discount]" value='0' [{$readonly}]>
-        <input class="edittext" type="checkbox" name="editval[oxvoucherseries__gw_handle_like_discount]" value='1' [{if $edit->oxvoucherseries__gw_handle_like_discount->value == 1}]checked[{/if}] [{$readonly}]>
-        [{oxinputhelp ident="HELP_GW_HANDLE_LIKE_DISCOUNT"}]
+        <input class="edittext" type="radio" name="editval[oxvoucherseries__gw_voucher_mode]" value='0' [{if $edit->oxvoucherseries__gw_voucher_mode->value == 0}]checked[{/if}] [{$readonly}]>[{oxmultilang ident="GW_STANDARD"}][{oxinputhelp ident="HELP_GW_STANDARD"}]<br>
+        <input class="edittext" type="radio" name="editval[oxvoucherseries__gw_voucher_mode]" value='1' [{if $edit->oxvoucherseries__gw_voucher_mode->value == 1}]checked[{/if}] [{$readonly}]>[{oxmultilang ident="GW_HANDLE_LIKE_DISCOUNT"}][{oxinputhelp ident="HELP_GW_HANDLE_LIKE_DISCOUNT"}]<br>
+        <input class="edittext" type="radio" name="editval[oxvoucherseries__gw_voucher_mode]" value='2' [{if $edit->oxvoucherseries__gw_voucher_mode->value == 2}]checked[{/if}] [{$readonly}]>[{oxmultilang ident="GW_HANDLE_APPLY_TO_OXORDERARTICLE"}][{oxinputhelp ident="HELP_GW_HANDLE_APPLY_TO_OXORDERARTICLE"}]
+
     </td>
 </tr>
 

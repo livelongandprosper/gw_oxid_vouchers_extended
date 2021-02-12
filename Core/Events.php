@@ -49,8 +49,9 @@
 				self::add_db_field('oxvoucherseries', 'gw_only_once_per_shipping_address', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'defines that vouchers of that series are only allowed for a single billing address'");
 				self::add_db_field('oxvouchers', 'gw_shipping_address_checksum', "VARCHAR(32) DEFAULT '' NOT NULL COMMENT 'md5 checksum shipping address of the order in which the voucher was used'");
 				self::add_db_field('oxvouchers', 'gw_transformed_to_discount', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT '1 if voucher was transformed to regular discount when order was finalized'");
+				self::add_db_field('oxvouchers', 'gw_applied_to_oxorderarticle', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT '1 if voucher was applied to oxorderarticles'");
 				self::add_db_field('oxvoucherseries', 'gw_only_not_reduced_articles', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'defines that vouchers of that series are only allowed for not reduced articles'");
-				self::add_db_field('oxvoucherseries', 'gw_handle_like_discount', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'vouchers should be handled as discount when order is finished'");
+				self::add_db_field('oxvoucherseries', 'gw_voucher_mode', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT '1 = vouchers should be handled like discount when order is finished; 2 = apply voucher directly to orderarticle'");
 				self::add_db_field('oxvoucherseries', 'gw_voucher_series_group', "VARCHAR(64) DEFAULT '' NOT NULL COMMENT 'used to group voucher series'");
 				self::add_db_field('oxvoucherseries', 'gw_same_group_not_allowed', "TINYINT(1) UNSIGNED DEFAULT 0 NOT NULL COMMENT 'vouchers are not allowed with vouchers of same series group'");
 

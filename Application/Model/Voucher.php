@@ -65,7 +65,15 @@ class Voucher extends Voucher_parent {
 	 */
 	public function isDiscountVoucher() {
 		$oSeries = $this->getSerie();
-		return (bool) $oSeries->oxvoucherseries__gw_handle_like_discount->value;
+		return ($oSeries->oxvoucherseries__gw_voucher_mode->value == 1);
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function shouldBeAppliedStraigtToOrderArticles() {
+		$oSeries = $this->getSerie();
+		return ($oSeries->oxvoucherseries__gw_voucher_mode->value == 2);
 	}
 
 	/**
@@ -96,8 +104,10 @@ class Voucher extends Voucher_parent {
 	 * @return bool
 	 */
 	protected function _isAvailableWithSameVoucherSeriesGroup($aVouchers) {
+		/*
 		$logger = Registry::getLogger();
 		$logger->error('', $aVouchers);
+		*/
 
 		if(is_array($aVouchers)) {
 			$oSeries = $this->getSerie();

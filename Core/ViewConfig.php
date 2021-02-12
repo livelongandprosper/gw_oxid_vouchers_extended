@@ -9,7 +9,7 @@
 		public function isDiscountVoucher($voucherId) {
 			$oVoucher = oxNew(Voucher::class);
 			$oVoucher->load($voucherId);
-			return $oVoucher->isDiscountVoucher();
+			return $oVoucher->isDiscountVoucher() || $oVoucher->shouldBeAppliedStraigtToOrderArticles();
 		}
 	}
 ?>

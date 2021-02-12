@@ -19,7 +19,7 @@ $aModule = array(
     'id'           => 'gw_oxid_vouchers_extended',
     'title'        => 'Erweiterte Gutscheinserien',
 //     'thumbnail'    => 'out/admin/img/logo.jpg',
-    'version'      => '1.4.0',
+    'version'      => '1.5.0',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
     'url'		   => 'https://www.gregor-wendland.com',
@@ -32,12 +32,15 @@ $aModule = array(
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
 								<li>Gutscheinserien können so eingestellt werden, dass sie nicht auf rabattierte Artikel (UVP > Preis) angewendet werden.</li>
 								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden. Dies kann sinnvoll sein, wenn ein Rabatt–Gutschein zwar wie ein Gutschein funktionieren soll, später aber als Rabatt verbucht werden soll. In manchen Warenwirtschaftssystemen können einzelne Gutscheine nicht als Rabatt verbucht werden, sondern müssen bereits beim Bestellabschluss als Rabatt (oxdiscount) und nicht als Gutschein (oxvoucherdiscount) gespeichert/übergeben werden.</li>
+								<li>Gutscheinserien können so eingestellt werden, dass Artikel-Gutscheine sich direkt auf den Preis der Warenkorbposition auswirken (wie bei einer Rabattaktion) und der Wert des Gutscheins nicht in den Gesamtbetrag der verwendeten Gutscheine einer Bestellung hinzuaddiert wird.</li>
 								<li>Gutscheinserien können gruppiert werden, sodass eingestellt werden kann, dass immer nur eine Gutscheinserie einer Gruppe verwendet werden darf.</li>
 							</ul>
 						',
     ),
     'extend'       => array(
+		OxidEsales\Eshop\Application\Model\Basket::class => gw\gw_oxid_vouchers_extended\Application\Model\Basket::class,
 		OxidEsales\Eshop\Application\Model\Discount::class => gw\gw_oxid_vouchers_extended\Application\Model\Discount::class,
+		OxidEsales\Eshop\Application\Model\DiscountList::class => gw\gw_oxid_vouchers_extended\Application\Model\DiscountList::class,
 		OxidEsales\Eshop\Application\Model\Order::class => gw\gw_oxid_vouchers_extended\Application\Model\Order::class,
 		OxidEsales\Eshop\Application\Model\Voucher::class => gw\gw_oxid_vouchers_extended\Application\Model\Voucher::class,
 		OxidEsales\Eshop\Application\Model\VoucherSerie::class => gw\gw_oxid_vouchers_extended\Application\Model\VoucherSerie::class,

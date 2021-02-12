@@ -24,6 +24,9 @@ $aLang = array(
 	'HELP_GW_VOUCER_SERIES_GROUP' => 'Gruppiert Gutscheinserien, sodass die Option "Nicht gültig mit gleicher Gutscheingruppe" angewandt werden kann. Groß- und Kleinschreibung wird nicht unterschieden. Wenn leer gelassen, keine Wirkung.',
 	'GW_NOT_ALLOWED_WITH_SAME_GROUP' => 'Nicht gültig mit gleicher Gutscheinserien-Gruppe',
 	'HELP_GW_NOT_ALLOWED_WITH_SAME_GROUP' => 'Ist dieses Feld angehackt, sind Gutscheine dieser Serie nicht mit Gutscheinen einer anderen Serie verwendbar, wenn Sie der gleichen Gruppe angehören. Wenn leer gelassen, keine Wirkung.',
-
+	'GW_STANDARD' => 'Standard',
+	'GW_HANDLE_APPLY_TO_OXORDERARTICLE' => 'Gutscheinwert nach Bestellabschluss direkt auf Warenkorb-Position anrechnen',
+	'HELP_GW_HANDLE_APPLY_TO_OXORDERARTICLE' => 'Ist diese Option ausgewählt, wird der Gutscheinwert in der DB-Tabelle oxorderarticles direkt auf den Preis dieser Warenkorb-Position angewandt.',
+	'GW_STANDARD' => 'Standard',
 );
 ?>
