@@ -60,7 +60,7 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
-	 * Should a voucher be converted to regular dicount (DB oxorder.oxdiscount)
+	 * Should a voucher be converted to regular discount (DB oxorder.oxdiscount)
 	 * @return bool
 	 */
 	public function isDiscountVoucher() {
