@@ -11,7 +11,6 @@ use OxidEsales\Eshop\Core\Registry;
  * @see OxidEsales\Eshop\Application\Model\Voucher
  */
 class Voucher extends Voucher_parent {
-	// Checking User Availability
 	/**
 	 * Checks availability for the given user. Returns array with errors.
 	 * @see OxidEsales\EshopCommunity\Application\Model\Voucher
@@ -47,19 +46,6 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
-	 * Returns true if voucher is product specific or only for not reduced articles, otherwise false
-	 *
-	 * @return boolean
-	 */
-	protected function _isProductVoucher() {
-		$oSeries = $this->getSerie();
-		if ($oSeries->oxvoucherseries__gw_only_not_reduced_articles->value) {
-			return true;
-		}
-		return parent::_isProductVoucher();
-	}
-
-	/**
 	 * Should a voucher be converted to regular discount (DB oxorder.oxdiscount)
 	 * @return bool
 	 */
@@ -69,27 +55,21 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public function shouldBeAppliedStraigtToOrderArticles() {
-		$oSeries = $this->getSerie();
-		return ($oSeries->oxvoucherseries__gw_voucher_mode->value == 2);
-	}
-
-	/**
-	 * Add field to oxdiscount__gw_dont_apply_for_reduced_articles to discount serie object
+	 * Add field oxdiscount__gw_dont_apply_for_reduced_articles to discount serie object.
 	 *
 	 * @return object
 	 */
 	protected function _getSerieDiscount() {
 		$oSeries = $this->getSerie();
 		$parent_return = parent::_getSerieDiscount();
-		$parent_return->oxdiscount__gw_dont_apply_for_reduced_articles = new \OxidEsales\Eshop\Core\Field((bool) $oSeries->oxvoucherseries__gw_only_not_reduced_articles->value);
-		$parent_return->oxdiscount__gw_is_product_voucher = new \OxidEsales\Eshop\Core\Field((bool) parent::_isProductVoucher());
-		$parent_return->oxdiscount__gw_is_category_voucher = new \OxidEsales\Eshop\Core\Field((bool) parent::_isCategoryVoucher());
 
 		return $parent_return;
 	}
+
+	/**
+	 * Make function _getSerieDiscount public.
+	 * @return object
+	 */
 	public function getSeriesDiscount() {
 		return $this->_getSerieDiscount();
 	}
@@ -104,14 +84,14 @@ class Voucher extends Voucher_parent {
 	 * @return bool
 	 */
 	protected function _isAvailableWithSameVoucherSeriesGroup($aVouchers) {
-		/*
-		$logger = Registry::getLogger();
-		$logger->error('', $aVouchers);
-		*/
-
 		if(is_array($aVouchers)) {
 			$oSeries = $this->getSerie();
-			if( count($aVouchers) > 1 && $oSeries->notAllowedWithSameGroup() && $oSeries->getGroupName() != '' ) {
+
+			// write notice to log file
+			$logger = Registry::getLogger();
+			$logger->notice("voucher count: " . count($aVouchers) . " erlaubt mit gleicher gutschein gruppe: ". (int)!$oSeries->notAllowedWithSameGroup(). ' gruppenname: '.$oSeries->getGroupName(), []);
+
+			if( count($aVouchers) > 0 && $oSeries->notAllowedWithSameGroup() && $oSeries->getGroupName() != '' ) {
 				$usedGroups = $this->_getVoucherSeriesGroupsUsed($aVouchers);
 				if( count($usedGroups) > 0 && in_array($oSeries->getGroupName(), $usedGroups) ) {
 					// Exception
@@ -126,7 +106,7 @@ class Voucher extends Voucher_parent {
 	}
 
 	/**
-	 * Return array of voucher series already
+	 * Return array of voucher series already used
 	 * (currently checked objects group will not be added to this array)
 	 * @param $aVouchers
 	 * @return array
@@ -216,16 +196,16 @@ class Voucher extends Voucher_parent {
 		// md5 of billing address
 		$md5 = md5(
 			strtolower(''
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcompany')?$oUser->oxuser__oxcompany->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxfname')?$oUser->oxuser__oxfname->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxlname')?$oUser->oxuser__oxlname->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreet')?$oUser->oxuser__oxstreet->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreetnr')?$oUser->oxuser__oxstreetnr->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxaddinfo')?$oUser->oxuser__oxaddinfo->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxzip')?$oUser->oxuser__oxzip->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcity')?$oUser->oxuser__oxcity->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcountryid')?$oUser->oxuser__oxcountryid->value:'')
-				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstateid')?$oUser->oxuser__oxstateid->value:'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcompany')?trim($oUser->oxuser__oxcompany->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxfname')?trim($oUser->oxuser__oxfname->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxlname')?trim($oUser->oxuser__oxlname->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreet')?trim($oUser->oxuser__oxstreet->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreetnr')?trim($oUser->oxuser__oxstreetnr->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxaddinfo')?trim($oUser->oxuser__oxaddinfo->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxzip')?trim($oUser->oxuser__oxzip->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcity')?trim($oUser->oxuser__oxcity->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcountryid')?trim($oUser->oxuser__oxcountryid->value):'')
+				.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstateid')?trim($oUser->oxuser__oxstateid->value):'')
 			)
 		);
 
@@ -236,16 +216,16 @@ class Voucher extends Voucher_parent {
 				if ($oDeliveryAddress) {
 					$md5 = md5(
 						strtolower(''
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcompany')?$oDeliveryAddress->oxaddress__oxcompany->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxfname')?$oDeliveryAddress->oxaddress__oxfname->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxlname')?$oDeliveryAddress->oxaddress__oxlname->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreet')?$oDeliveryAddress->oxaddress__oxstreet->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreetnr')?$oDeliveryAddress->oxaddress__oxstreetnr->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxaddinfo')?$oDeliveryAddress->oxaddress__oxaddinfo->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxzip')?$oDeliveryAddress->oxaddress__oxzip->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcity')?$oDeliveryAddress->oxaddress__oxcity->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcountryid')?$oDeliveryAddress->oxaddress__oxcountryid->value:'')
-							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstateid')?$oDeliveryAddress->oxaddress__oxstateid->value:'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcompany')?trim($oDeliveryAddress->oxaddress__oxcompany->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxfname')?trim($oDeliveryAddress->oxaddress__oxfname->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxlname')?trim($oDeliveryAddress->oxaddress__oxlname->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreet')?trim($oDeliveryAddress->oxaddress__oxstreet->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstreetnr')?trim($oDeliveryAddress->oxaddress__oxstreetnr->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxaddinfo')?trim($oDeliveryAddress->oxaddress__oxaddinfo->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxzip')?trim($oDeliveryAddress->oxaddress__oxzip->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcity')?trim($oDeliveryAddress->oxaddress__oxcity->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxcountryid')?trim($oDeliveryAddress->oxaddress__oxcountryid->value):'')
+							.($myConfig->getConfigParam('gw_oxid_vouchers_extended_oxstateid')?trim($oDeliveryAddress->oxaddress__oxstateid->value):'')
 						)
 					);
 				}
@@ -253,6 +233,27 @@ class Voucher extends Voucher_parent {
 		}
 
 		return $md5;
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isTransformedToDiscount() {
+		return (bool)$this->oxvouchers__gw_transformed_to_discount->value;
+	}
+
+	/**
+	 * @param $value
+	 */
+	public function setTransformedToDiscount($value) {
+		$this->oxvouchers__gw_transformed_to_discount->setValue((int)1);
+	}
+
+	/**
+	 * @return mixed
+	 */
+	public function onlyForNotReducedArticles() {
+		return $this->getSerie()->onlyForNotReducedArticles();
 	}
 }
 ?>

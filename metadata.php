@@ -19,7 +19,7 @@ $aModule = array(
     'id'           => 'gw_oxid_vouchers_extended',
     'title'        => 'Erweiterte Gutscheinserien',
 //     'thumbnail'    => 'out/admin/img/logo.jpg',
-    'version'      => '1.5.0',
+    'version'      => '1.5.1',
     'author'       => 'Gregor Wendland',
     'email'		   => 'oxid@gregor-wendland.de',
     'url'		   => 'https://www.gregor-wendland.com',
@@ -27,12 +27,9 @@ $aModule = array(
     	'de'		=> 'Erweitert die Möglichkeiten von Gutscheinserien in OXID eShop
 							<ul>
 								<li>Ermöglicht, dass Gutscheine einer Gutscheinserien nur einmal pro Liefer-Adresse verwendet werden können</li>
-								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt eingegeben werden können (dabei findet eine Weiterleitung auf die Warenkorb-Seite statt, was aber durch ein einfaches JavaScript, dass den Prozess per AJAX realsiiert, für die Benutzer-Ansicht umgegangen werden kann)</li>
 								<li>Ermöglicht, dass Gutscheine auch im vorletzten Bestellschritt (Zahlung und Versand) eingegeben werden können</li>
 								<li>Ermöglicht, dass Gutscheine auch im letzten Bestellschritt (Besellung überprüfen) eingegeben werden können</li>
-								<li>Gutscheinserien können so eingestellt werden, dass sie nicht auf rabattierte Artikel (UVP > Preis) angewendet werden.</li>
 								<li>Gutscheine können am Ende der Bestellung als Rabatt verrechnet werden. Dies kann sinnvoll sein, wenn ein Rabatt–Gutschein zwar wie ein Gutschein funktionieren soll, später aber als Rabatt verbucht werden soll. In manchen Warenwirtschaftssystemen können einzelne Gutscheine nicht als Rabatt verbucht werden, sondern müssen bereits beim Bestellabschluss als Rabatt (oxdiscount) und nicht als Gutschein (oxvoucherdiscount) gespeichert/übergeben werden.</li>
-								<li>Gutscheinserien können so eingestellt werden, dass Artikel-Gutscheine sich direkt auf den Preis der Warenkorbposition auswirken (wie bei einer Rabattaktion) und der Wert des Gutscheins nicht in den Gesamtbetrag der verwendeten Gutscheine einer Bestellung hinzuaddiert wird.</li>
 								<li>Gutscheinserien können gruppiert werden, sodass eingestellt werden kann, dass immer nur eine Gutscheinserie einer Gruppe verwendet werden darf.</li>
 							</ul>
 						',

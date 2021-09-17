@@ -7,6 +7,15 @@ use OxidEsales\Eshop\Core\Registry;
  * @see OxidEsales\Eshop\Application\Model\Order
  */
 class Order extends Order_parent {
+
+	/**
+	 * Extend function so that
+	 * - discount voucher will be converted to discounts
+	 * @param \OxidEsales\Eshop\Application\Model\Basket $oBasket
+	 * @param $oUser
+	 * @param false $blRecalculatingOrder
+	 * @return mixed
+	 */
 	public function finalizeOrder(\OxidEsales\Eshop\Application\Model\Basket $oBasket, $oUser, $blRecalculatingOrder = false) {
 		if(!$blRecalculatingOrder) {
 			$orderId = \OxidEsales\Eshop\Core\Registry::getSession()->getVariable('sess_challenge');
@@ -15,18 +24,14 @@ class Order extends Order_parent {
 		}
 		$saveOrderAtEnd = false;
 
-		// check if there are vouchers to be transformed in regular discount that should be assigned to every article
-		if(!$blRecalculatingOrder && $this->_applyDirectOrderArticlePriceDiscountVoucher($orderId, $oBasket, $oUser)) {
-			$oBasket->calculateBasket(true);
-		}
-
+		// !finalize order must not be moved to end of this function
 		$parent_return = parent::finalizeOrder($oBasket, $oUser, $blRecalculatingOrder);
 
-		if(!$blRecalculatingOrder && parent::ORDER_STATE_OK) {
-			// at this point the order was already saved
+		if(parent::ORDER_STATE_OK) {
+			// at this point the order was already saved by the parent method finalizeOrder
 			$this->load($orderId);
 
-			// get all vouchers applied
+			// get all vouchers applied to this order
  			$vouchers = $oBasket->getVouchers();
 
 			// check if voucher series is discount voucher
@@ -35,32 +40,33 @@ class Order extends Order_parent {
 					$oVoucher = oxNew(\OxidEsales\Eshop\Application\Model\Voucher::class);
 					$oVoucher->load($voucherId);
 
-					if($oVoucher->isDiscountVoucher()) {
-						$oDiscount = $oVoucher->getSeriesDiscount();
-
-						// calculating price to apply discount
-						$dPrice = 0.0;
-						foreach ($this->getOrderArticles(true) as $oOrderArticle) {
-							if ($oDiscount->isForBasketItem($oOrderArticle)) {
-								$dPrice += $oOrderArticle->oxorderarticles__oxbprice->value;
-							}
-						}
-
+					/**
+					 * check if voucher should be converted to regular discount
+					 * and check if voucher was already transformed to discount (prevent multiple transformations)
+					 */
+					if(
+						$oVoucher->isDiscountVoucher() && !$oVoucher->isTransformedToDiscount() // dont convert voucher to discount twice
+						|| $blRecalculatingOrder && $oVoucher->isDiscountVoucher() // convert again if order is recalculated
+					) {
 						// remove voucher discount
-						$dVoucherdiscount = $oVoucher->getDiscountValue($dPrice);
+						$dVoucherdiscount = $oVoucher->oxvouchers__oxdiscount->value; // the discount value should be calculated at this point, so we directly take the discount value of the voucher and don't calculate it again
 
-						// reduce voucherdiscount
+						// write notice to log file
+						$logger = Registry::getLogger();
+						$logger->notice("transform voucher " . $stdObjVoucher->sVoucherNr . " to regular discount. voucher discount value: ".$dVoucherdiscount, []);
+
+						// reduce voucher discount
 						if($this->oxorder__oxvoucherdiscount->value == $dVoucherdiscount) {
 							$this->oxorder__oxvoucherdiscount->value = 0.0;
 						} else {
 							$this->addVoucherDiscount(-$dVoucherdiscount);
 						}
 
-						// add regular discount
+						// add as regular discount
 						$this->addDiscount($dVoucherdiscount);
 
 						// mark voucher as transformed
-						$oVoucher->oxvouchers__gw_transformed_to_discount->setValue(1);
+						$oVoucher->setTransformedToDiscount(1);
 						$oVoucher->save();
 						$saveOrderAtEnd = true;
 					}
@@ -72,38 +78,22 @@ class Order extends Order_parent {
 			$this->save();
 		}
 
+		// write notices
+		if($this->oxorder__oxvoucherdiscount->value || $this->oxorder__oxdiscount->value) {
+			$logger = Registry::getLogger();
+
+			// write notice to log file
+			$logger->notice($this->oxorder__oxordernr->value . " total order voucher value: ".$this->oxorder__oxvoucherdiscount->value);
+
+			// write notice to log file
+			$logger->notice($this->oxorder__oxordernr->value . " total order discount value: ".$this->oxorder__oxdiscount->value);
+		}
+
 		return $parent_return;
 	}
 
 	/**
-	 * s
-	 * @param $oVoucher
-	 * @return false if nothing was changed, true else
-	 */
-	protected function _applyDirectOrderArticlePriceDiscountVoucher($orderId, $oBasket, $oUser) {
-		$return_value = false;
-		$vouchers = $oBasket->getVouchers();
-		if(count($vouchers)) {
-			foreach ($vouchers as $voucherId => $stdObjVoucher) {
-				$oVoucher = oxNew(\OxidEsales\Eshop\Application\Model\Voucher::class);
-				$oVoucher->load($voucherId);
-
-				if($oVoucher->shouldBeAppliedStraigtToOrderArticles()) {
-					$oDiscount = $oVoucher->getSeriesDiscount();
-					$oBasket->addBasketItemDiscount($oDiscount);
-					$oBasket->removeVoucher($oVoucher->getId());
-					$oVoucher->markAsUsed($orderId, $oUser->getId(), 0);
-					$oVoucher->oxvouchers__gw_applied_to_oxorderarticle->setValue(1);
-					$oVoucher->save();
-					$return_value = true;
-				}
-			}
-		}
-
-		return $return_value;
-	}
-
-	/**
+	 * Add a std discount value to the total order discount value.
 	 * @param float $discountToAdd
 	 */
 	protected function addDiscount($discountToAdd = 0.0) {
@@ -116,6 +106,7 @@ class Order extends Order_parent {
 	}
 
 	/**
+	 * Add a voucher discount value to the total order voucher discount value.
 	 * @param float $discountToAdd
 	 */
 	protected function addVoucherDiscount($discountToAdd = 0.0) {
