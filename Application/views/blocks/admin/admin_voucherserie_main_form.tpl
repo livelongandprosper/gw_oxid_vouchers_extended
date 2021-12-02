@@ -32,6 +32,10 @@
     <td class="edittext">
         <input class="edittext" type="text" name="editval[oxvoucherseries__gw_voucher_series_group]" value='[{if $edit->oxvoucherseries__gw_voucher_series_group->value}][{$edit->oxvoucherseries__gw_voucher_series_group->value}][{/if}]' [{$readonly}]>
         [{oxinputhelp ident="HELP_GW_VOUCER_SERIES_GROUP"}]
+        <br>
+        [{if method_exists($edit, 'getAvailableGroupNames')}]
+        [{oxmultilang ident="GW_VOUCHER_GROUPS_AVAILABLE"}]: [{$edit->getAvailableGroupNames()}]
+        [{/if}]
     </td>
 </tr>
 <tr>

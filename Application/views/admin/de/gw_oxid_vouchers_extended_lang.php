@@ -24,5 +24,7 @@ $aLang = array(
 	'GW_STANDARD' => 'Standard',
 	'GW_HANDLE_APPLY_TO_OXORDERARTICLE' => 'Gutscheinwert nach Bestellabschluss direkt auf Warenkorb-Positionen anrechnen',
 	'GW_STANDARD' => 'Standard',
+
+	'GW_VOUCHER_GROUPS_AVAILABLE' => 'Verfügbare Gruppen'
 );
 ?>
