@@ -10,7 +10,7 @@
 /**
  * Metadata version
  */
-$sMetadataVersion = '2'; // see https://docs.oxid-esales.com/developer/en/6.0/modules/skeleton/metadataphp/version20.html
+$sMetadataVersion = '2.0'; // see https://docs.oxid-esales.com/developer/en/6.0/modules/skeleton/metadataphp/version20.html
 
 /**
  * Module information
@@ -58,8 +58,6 @@ $aModule = array(
 		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxcity', 'type' => 'bool', 'value' => '1'),
 		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxcountryid', 'type' => 'bool', 'value' => '1'),
 		array('group' => 'gw_oxid_vouchers_extended_address_fields', 'name' => 'gw_oxid_vouchers_extended_oxstateid', 'type' => 'bool', 'value' => '0'),
-    ),
-    'files'			=> array(
     ),
 	'blocks' => array(
 		// frontend
